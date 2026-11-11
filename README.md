@@ -9,10 +9,12 @@ Fase 1 — backend core, em andamento. Sem interface ainda (nem admin panel, nem
 
 - [x] Scaffold Django + apps (contas, rebanho, financeiro, maquinas, rh, obras, sync)
 - [x] Modelo `rebanho` (Animal, EventoVida, CicloReprodutivo, RegistroSaude)
-- [ ] Modelo `financeiro`
-- [ ] Modelo `maquinas` (+ Peças)
-- [ ] Modelo `rh` + `obras`
-- [ ] Permissões por papel (Administrador / Peão / Contador)
+- [x] Modelo `financeiro` (Lancamento + relatório `Lancamento.objects.fechamento(inicio, fim)`)
+- [x] Modelo `maquinas` (Maquina, ControleHoras, Peca)
+- [x] Modelo `rh` (Funcionario, DiaTrabalhado) + `obras` (Obra, LancamentoObra)
+- [x] Permissões por papel: grupos Administradores / Peao / Contador recriados a cada `migrate` (`apps/contas/permissoes.py`)
+
+Testes: `docker compose exec backend python manage.py test apps`
 
 ## Rodando localmente (requer Docker)
 

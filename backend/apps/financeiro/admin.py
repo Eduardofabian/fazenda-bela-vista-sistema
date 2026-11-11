@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Lancamento
+
+
+@admin.register(Lancamento)
+class LancamentoAdmin(admin.ModelAdmin):
+    list_display = ("data", "tipo", "categoria", "descricao", "fornecedor", "valor", "forma_pagamento", "maquina")
+    list_filter = ("tipo", "categoria", "forma_pagamento", "maquina")
+    search_fields = ("descricao", "fornecedor")
+    date_hierarchy = "data"
