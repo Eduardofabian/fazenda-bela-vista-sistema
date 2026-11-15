@@ -1,10 +1,11 @@
 """
-Obras (cercas, reformas) e os gastos de cada uma.
+Obras (cercas, reformas) — aqui é só o cadastro/histórico da obra em si.
 
-TODO-CONFIRMAR com o Gerci: `LancamentoObra` é separado de
-`financeiro.Lancamento` (que também tem a categoria CERCAS_OBRAS), como pedido
-nos requisitos. Se o mesmo gasto for lançado nos dois lugares, o fechamento
-financeiro não soma obras automaticamente — decidir se um vira o outro.
+Decisão fechada em 15/11: o gasto de verdade NÃO entra aqui. Todo gasto de
+obra é lançado em `financeiro.Lancamento` (categoria CERCAS_OBRAS) com a FK
+`obra` preenchida — mesmo padrão que já existe pra `Maquina`. Isso faz o
+fechamento financeiro somar obras automaticamente, sem risco de lançar o
+mesmo gasto duas vezes em dois lugares.
 """
 
 from django.db import models
@@ -21,18 +22,3 @@ class Obra(models.Model):
 
     def __str__(self):
         return self.descricao
-
-
-class LancamentoObra(models.Model):
-    obra = models.ForeignKey(Obra, on_delete=models.CASCADE, related_name="lancamentos")
-    data = models.DateField()
-    descricao = models.CharField(max_length=255)
-    valor = models.DecimalField(max_digits=12, decimal_places=2)
-
-    class Meta:
-        verbose_name = "Lançamento de Obra"
-        verbose_name_plural = "Lançamentos de Obra"
-        ordering = ["-data"]
-
-    def __str__(self):
-        return f"{self.obra} — {self.descricao} — R$ {self.valor}"

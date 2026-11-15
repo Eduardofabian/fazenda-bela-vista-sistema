@@ -13,6 +13,10 @@ Decisões e PREMISSAS (TODO-CONFIRMAR com o Gerci):
 - Fornecedor é texto livre (não há cadastro de fornecedores nos requisitos).
 - "Fechamento" NÃO é um model: é o relatório `Lancamento.objects.fechamento()`,
   soma por categoria/tipo num período. Não trava lançamento.
+- Decisão fechada em 15/11: gasto de obra (cerca, reforma) é lançado AQUI
+  (categoria CERCAS_OBRAS), com a FK `obra` preenchida — `obras.Obra` é só
+  cadastro/histórico, não tem mais lançamento próprio (`LancamentoObra` foi
+  removido). Mesmo padrão já usado com `maquina`.
 """
 
 from django.db import models
@@ -66,6 +70,14 @@ class Lancamento(models.Model):
         on_delete=models.PROTECT,  # não apagar máquina com gasto lançado — perderia o histórico
         related_name="lancamentos",
         help_text="Opcional — pra saber gasto por máquina (ex: diesel do MF 5285).",
+    )
+    obra = models.ForeignKey(
+        "obras.Obra",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,  # não apagar obra com gasto lançado — perderia o histórico
+        related_name="lancamentos",
+        help_text="Opcional — preencher quando categoria for Cercas/Obras.",
     )
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
