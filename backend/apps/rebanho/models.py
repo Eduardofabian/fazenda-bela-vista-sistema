@@ -14,6 +14,8 @@ pra produção (marcadas com TODO-CONFIRMAR):
   TODO-CONFIRMAR: vai ter resinc/renumeração dos brincos duplicados?
 """
 
+from datetime import date
+
 from django.db import models
 
 
@@ -70,6 +72,30 @@ class Animal(models.Model):
 
     def __str__(self):
         return f"{self.numero_brinco or 'S/N'} ({self.get_categoria_display()})"
+
+    @property
+    def data_ultimo_parto(self):
+        """Data do nascimento mais recente em que este animal aparece como mãe.
+        Método 1 de detectar vaca atrasada: não depende de ter lançado cobertura/
+        IATF nenhuma, só dos partos reais já registrados (EventoVida tipo Nascimento)."""
+        ultimo = self.filhos_events_mais_recente()
+        return ultimo.data if ultimo else None
+
+    def filhos_events_mais_recente(self):
+        return (
+            EventoVida.objects.filter(
+                tipo=EventoVida.Tipo.NASCIMENTO, animal__mae_id=self.id
+            )
+            .order_by("-data")
+            .first()
+        )
+
+    @property
+    def dias_desde_ultimo_parto(self):
+        ultima_data = self.data_ultimo_parto
+        if ultima_data is None:
+            return None
+        return (date.today() - ultima_data).days
 
 
 class EventoVida(models.Model):
@@ -165,6 +191,27 @@ class CicloReprodutivo(models.Model):
 
     def __str__(self):
         return f"{self.vaca} — cobertura em {self.data_cobertura}"
+
+    @property
+    def atrasada(self):
+        """Método 2 de detectar vaca atrasada: baseado na previsão de parto
+        calculada a partir da cobertura/IATF registrada. Funciona como
+        double-check do método 1 (Animal.dias_desde_ultimo_parto) — se os dois
+        apontarem atraso, o alerta é mais confiável; se só um apontar, pode ser
+        que a cobertura não tenha sido lançada corretamente, ou vice-versa."""
+        if self.resultado_diagnostico != self.ResultadoDiagnostico.PRENHA:
+            return False
+        if self.data_parto_real is not None:
+            return False
+        if self.data_prevista_parto is None:
+            return False
+        return date.today() > self.data_prevista_parto
+
+    @property
+    def dias_atraso(self):
+        if not self.atrasada:
+            return 0
+        return (date.today() - self.data_prevista_parto).days
 
 
 class RegistroSaude(models.Model):
