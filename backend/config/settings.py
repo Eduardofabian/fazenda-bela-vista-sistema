@@ -114,6 +114,12 @@ else:
         }
     }
 
+# Painel admin (Next.js) roda em outra origem (localhost:3000 em dev) e
+# precisa chamar essa API — sem isso o navegador bloqueia a requisição.
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS", default="http://localhost:3000", cast=Csv()
+)
+
 AUTH_USER_MODEL = "contas.Usuario"
 
 # Auth por token: o app do peão loga uma vez e guarda o token (fica fácil de
