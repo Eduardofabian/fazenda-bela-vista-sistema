@@ -5,8 +5,8 @@ Grupos do Django por papel (`Usuario.papel`). Recriados a cada `migrate`
 - Administradores (Leonardo e Gerci): tudo, mesmo nível, sem hierarquia.
 - Peao: só criar EventoVida. `view_animal` porque pra lançar o evento precisa
   escolher o animal. TODO-CONFIRMAR quando a API do app existir.
-- Contador: só leitura do financeiro. TODO-CONFIRMAR com o Gerci — os
-  requisitos não dizem o que o contador acessa.
+- Contador: confirmado em 15/11 — só visualização do financeiro, sem
+  permissão de lançamento. Ele recebe o que o Gerci manda, não lança nada.
 
 Obs: o grupo dá as permissões; acessar o Django Admin ainda exige `is_staff`.
 O vínculo papel → grupo é manual no admin por enquanto.

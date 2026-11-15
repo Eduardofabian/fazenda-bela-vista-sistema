@@ -1,15 +1,13 @@
 """
 Lançamentos financeiros. Substitui as abas de despesas/receitas da planilha.
 
-Decisões e PREMISSAS (TODO-CONFIRMAR com o Gerci):
+Decisões e PREMISSAS:
 - Categoria é TextChoices fixo (padrão do `rebanho`), não tabela editável.
   A hierarquia da planilha (ex: Diesel > Tratores / Camionetes) está achatada
   no próprio valor (DIESEL_TRATORES, DIESEL_CAMIONETES...). Se o Gerci precisar
   criar categoria nova sem deploy, isso vira model `Categoria` com FK `pai`.
-  TODO-CONFIRMAR: a lista abaixo cobre tudo? Não há categoria de receita
-  definida nas anotações (ex: venda de gado) — por enquanto cai em OUTROS.
-- Forma de pagamento: lista assumida pelo que é comum em fazenda.
-  TODO-CONFIRMAR quais formas o Gerci usa de verdade.
+- Confirmado em 15/11: categoria própria pra venda de gado (receita). Formas
+  de pagamento cobrem tudo, incluindo troca/permuta (cai em `FormaPagamento.OUTROS`).
 - Fornecedor é texto livre (não há cadastro de fornecedores nos requisitos).
 - "Fechamento" NÃO é um model: é o relatório `Lancamento.objects.fechamento()`,
   soma por categoria/tipo num período. Não trava lançamento.
@@ -46,15 +44,17 @@ class Lancamento(models.Model):
         INSUMO_VACINAS = "INSUMO_VACINAS", "Insumos do gado — Vacinas"
         CERCAS_OBRAS = "CERCAS_OBRAS", "Cercas / Obras"
         NOTAS_FISCAIS = "NOTAS_FISCAIS", "Notas fiscais"
-        OUTROS = "OUTROS", "Outros"  # TODO-CONFIRMAR (ver docstring do módulo)
+        VENDA_GADO = "VENDA_GADO", "Venda de gado"
+        OUTROS = "OUTROS", "Outros"
 
-    class FormaPagamento(models.TextChoices):  # TODO-CONFIRMAR (ver docstring)
+    class FormaPagamento(models.TextChoices):
         DINHEIRO = "DINHEIRO", "Dinheiro"
         PIX = "PIX", "Pix"
         TRANSFERENCIA = "TRANSFERENCIA", "Transferência"
         BOLETO = "BOLETO", "Boleto"
         CARTAO = "CARTAO", "Cartão"
         CHEQUE = "CHEQUE", "Cheque"
+        OUTROS = "OUTROS", "Outros (ex: troca/permuta)"
 
     data = models.DateField()
     categoria = models.CharField(max_length=20, choices=Categoria.choices)

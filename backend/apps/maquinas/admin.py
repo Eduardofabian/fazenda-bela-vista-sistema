@@ -10,15 +10,15 @@ class PecaInline(admin.TabularInline):
 
 @admin.register(Maquina)
 class MaquinaAdmin(admin.ModelAdmin):
-    list_display = ("nome", "modelo", "tipo")
+    list_display = ("nome", "modelo", "placa", "tipo")
     list_filter = ("tipo",)
-    search_fields = ("nome", "modelo")
+    search_fields = ("nome", "modelo", "placa")
     inlines = [PecaInline]
 
 
 @admin.register(ControleHoras)
 class ControleHorasAdmin(admin.ModelAdmin):
-    list_display = ("maquina", "data", "horas", "observacao")
+    list_display = ("maquina", "data", "horas", "km_inicial", "km_final", "observacao")
     list_filter = ("maquina",)
     date_hierarchy = "data"
 

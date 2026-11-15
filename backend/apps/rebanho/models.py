@@ -11,7 +11,10 @@ pra produção (marcadas com TODO-CONFIRMAR):
 - Número de brinco é texto (não inteiro) porque a planilha tem casos "S/N"
   (sem número) e números duplicados entre animais diferentes (37 casos
   encontrados no censo original) — por isso NÃO é unique aqui ainda.
-  TODO-CONFIRMAR: vai ter resinc/renumeração dos brincos duplicados?
+  Confirmado em 15/11: vai ter renumeração correta na fazenda (correção
+  física dos brincos duplicados). Quando isso acontecer, dá pra reavaliar
+  se `numero_brinco` passa a ser `unique=True` daqui pra frente — o campo
+  `numero_brinco_duplicado` continua marcando os registros históricos.
 """
 
 from datetime import date
