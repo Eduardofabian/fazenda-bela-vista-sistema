@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "corsheaders",
     "apps.contas",
     "apps.rebanho",
@@ -115,9 +116,17 @@ else:
 
 AUTH_USER_MODEL = "contas.Usuario"
 
+# Auth por token: o app do peão loga uma vez e guarda o token (fica fácil de
+# reenviar depois de ficar sem sinal). SessionAuthentication fica disponível
+# também, útil se o painel admin web mais pra frente fizer chamada autenticada
+# por cookie de sessão em vez de token.
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "apps.contas.drf_permissions.DjangoModelPermissionsIncludingView",
     ],
 }
 
@@ -144,9 +153,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Porto_Velho"  # fazenda é em Rondônia (UTC-4)
 
 USE_I18N = True
 

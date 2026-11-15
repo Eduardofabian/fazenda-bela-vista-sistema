@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import Obra
+from .serializers import ObraSerializer
+
+
+class ObraViewSet(viewsets.ModelViewSet):
+    queryset = Obra.objects.all()
+    serializer_class = ObraSerializer

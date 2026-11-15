@@ -16,8 +16,17 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # Login da API: POST {"username", "password"} -> {"token": "..."}.
+    # O app do peão loga uma vez e guarda esse token pras próximas chamadas.
+    path("api/auth-token/", obtain_auth_token, name="api-auth-token"),
+    path("api/rebanho/", include("apps.rebanho.urls")),
+    path("api/financeiro/", include("apps.financeiro.urls")),
+    path("api/maquinas/", include("apps.maquinas.urls")),
+    path("api/rh/", include("apps.rh.urls")),
+    path("api/obras/", include("apps.obras.urls")),
 ]

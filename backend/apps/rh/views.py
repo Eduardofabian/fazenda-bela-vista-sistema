@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import DiaTrabalhado, Funcionario
+from .serializers import DiaTrabalhadoSerializer, FuncionarioSerializer
+
+
+class FuncionarioViewSet(viewsets.ModelViewSet):
+    queryset = Funcionario.objects.all()
+    serializer_class = FuncionarioSerializer
+
+
+class DiaTrabalhadoViewSet(viewsets.ModelViewSet):
+    queryset = DiaTrabalhado.objects.select_related("funcionario").all()
+    serializer_class = DiaTrabalhadoSerializer
