@@ -10,6 +10,19 @@ class LancamentoViewSet(viewsets.ModelViewSet):
     queryset = Lancamento.objects.select_related("maquina", "obra").all()
     serializer_class = LancamentoSerializer
 
+    def get_queryset(self):
+        # Filtro simples por query string — o painel usa isso na tela de
+        # lançamentos (?tipo=...&categoria=...). Sem django-filter de
+        # propósito: são só 2 campos, não vale a dependência extra.
+        qs = super().get_queryset()
+        tipo = self.request.query_params.get("tipo")
+        categoria = self.request.query_params.get("categoria")
+        if tipo:
+            qs = qs.filter(tipo=tipo)
+        if categoria:
+            qs = qs.filter(categoria=categoria)
+        return qs
+
     @action(detail=False, methods=["get"])
     def fechamento(self, request):
         """Requisito #2 da reunião ("fechamentos", alta relevância): soma por
