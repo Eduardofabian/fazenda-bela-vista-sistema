@@ -7,8 +7,9 @@ import { clearToken } from "@/lib/api";
 const LINKS = [
   { href: "/animais", label: "Rebanho" },
   { href: "/financeiro", label: "Financeiro" },
-  // próximos módulos entram aqui conforme forem construídos (máquinas, rh,
-  // obras) — ver TAREFA02.
+  { href: "/maquinas", label: "Máquinas" },
+  // próximos módulos entram aqui conforme forem construídos (rh, obras) —
+  // ver TAREFA02.
 ];
 
 export default function Nav() {
