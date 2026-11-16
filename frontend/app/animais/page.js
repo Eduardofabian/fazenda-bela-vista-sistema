@@ -165,36 +165,78 @@ function AnimaisConteudo() {
       {carregando ? (
         <p className="text-sm text-zinc-500">Carregando...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-2 pr-4">Brinco</th>
-                <th className="py-2 pr-4">Sexo</th>
-                <th className="py-2 pr-4">Categoria</th>
-                <th className="py-2 pr-4">Status</th>
-                <th className="py-2 pr-4">Dias sem parir</th>
-                <th className="py-2 pr-4">Observações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {animais.map((a) => (
-                <tr key={a.id} className="border-b border-zinc-100">
-                  <td className="py-2 pr-4 font-medium">{a.numero_brinco || "S/N"}</td>
-                  <td className="py-2 pr-4">{a.sexo}</td>
-                  <td className="py-2 pr-4">{a.categoria}</td>
-                  <td className="py-2 pr-4">{a.status}</td>
-                  <td className="py-2 pr-4">
-                    {a.categoria === "VACA"
-                      ? a.dias_desde_ultimo_parto ?? "sem registro"
-                      : "—"}
-                  </td>
-                  <td className="py-2 pr-4 text-zinc-500">{a.observacoes}</td>
+        <>
+          {/* Celular: cada animal como cartão (sem rolagem lateral). */}
+          <div className="space-y-2 sm:hidden">
+            {animais.map((a) => (
+              <div key={a.id} className="rounded border border-zinc-200 bg-white p-3 text-sm">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-medium text-zinc-900">
+                    {a.numero_brinco || "S/N"}
+                  </span>
+                  <span className="text-xs text-zinc-500">{a.status}</span>
+                </div>
+                <dl className="mt-1 grid grid-cols-2 gap-x-2 gap-y-1 text-zinc-600">
+                  <div className="flex gap-1">
+                    <dt className="text-zinc-400">Sexo:</dt>
+                    <dd>{a.sexo}</dd>
+                  </div>
+                  <div className="flex gap-1">
+                    <dt className="text-zinc-400">Categoria:</dt>
+                    <dd>{a.categoria}</dd>
+                  </div>
+                  {a.categoria === "VACA" && (
+                    <div className="col-span-2 flex gap-1">
+                      <dt className="text-zinc-400">Dias sem parir:</dt>
+                      <dd>{a.dias_desde_ultimo_parto ?? "sem registro"}</dd>
+                    </div>
+                  )}
+                  {a.observacoes && (
+                    <div className="col-span-2 flex gap-1">
+                      <dt className="text-zinc-400">Obs:</dt>
+                      <dd>{a.observacoes}</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            ))}
+            {animais.length === 0 && (
+              <p className="text-sm text-zinc-500">Nenhum animal cadastrado.</p>
+            )}
+          </div>
+
+          {/* Telas maiores: tabela de verdade. */}
+          <div className="hidden overflow-x-auto sm:block">
+            <table className="w-full min-w-[640px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-2 pr-4">Brinco</th>
+                  <th className="py-2 pr-4">Sexo</th>
+                  <th className="py-2 pr-4">Categoria</th>
+                  <th className="py-2 pr-4">Status</th>
+                  <th className="py-2 pr-4">Dias sem parir</th>
+                  <th className="py-2 pr-4">Observações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {animais.map((a) => (
+                  <tr key={a.id} className="border-b border-zinc-100">
+                    <td className="py-2 pr-4 font-medium">{a.numero_brinco || "S/N"}</td>
+                    <td className="py-2 pr-4">{a.sexo}</td>
+                    <td className="py-2 pr-4">{a.categoria}</td>
+                    <td className="py-2 pr-4">{a.status}</td>
+                    <td className="py-2 pr-4">
+                      {a.categoria === "VACA"
+                        ? a.dias_desde_ultimo_parto ?? "sem registro"
+                        : "—"}
+                    </td>
+                    <td className="py-2 pr-4 text-zinc-500">{a.observacoes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

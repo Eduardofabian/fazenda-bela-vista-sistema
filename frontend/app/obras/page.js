@@ -105,38 +105,62 @@ function ObrasConteudo() {
       {carregando ? (
         <p className="text-sm text-zinc-500">Carregando...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[400px] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-2 pr-4">Descrição</th>
-                <th className="py-2 pr-4">Início</th>
-                <th className="py-2 pr-4">Gastos</th>
-              </tr>
-            </thead>
-            <tbody>
-              {obras.map((o) => (
-                <tr key={o.id} className="border-b border-zinc-100">
-                  <td className="py-2 pr-4">{o.descricao}</td>
-                  <td className="py-2 pr-4">{o.data_inicio}</td>
-                  <td className="py-2 pr-4">
-                    <a
-                      href={`/financeiro?obra=${o.id}`}
-                      className="text-emerald-700 underline"
-                    >
-                      ver no financeiro
-                    </a>
-                  </td>
+        <>
+          {/* Celular: cartões. */}
+          <div className="space-y-2 sm:hidden">
+            {obras.map((o) => (
+              <div key={o.id} className="rounded border border-zinc-200 bg-white p-3 text-sm">
+                <div className="font-medium text-zinc-900">{o.descricao}</div>
+                <div className="mt-1 flex items-center justify-between">
+                  <span className="text-xs text-zinc-500">Início: {o.data_inicio}</span>
+                  <a
+                    href={`/financeiro?obra=${o.id}`}
+                    className="text-sm text-emerald-700 underline"
+                  >
+                    ver no financeiro
+                  </a>
+                </div>
+              </div>
+            ))}
+            {obras.length === 0 && (
+              <p className="text-sm text-zinc-500">Nenhuma obra cadastrada.</p>
+            )}
+          </div>
+
+          {/* Telas maiores: tabela. */}
+          <div className="hidden overflow-x-auto sm:block">
+            <table className="w-full min-w-[400px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-2 pr-4">Descrição</th>
+                  <th className="py-2 pr-4">Início</th>
+                  <th className="py-2 pr-4">Gastos</th>
                 </tr>
-              ))}
-              {obras.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="py-2 text-zinc-500">Nenhuma obra cadastrada.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {obras.map((o) => (
+                  <tr key={o.id} className="border-b border-zinc-100">
+                    <td className="py-2 pr-4">{o.descricao}</td>
+                    <td className="py-2 pr-4">{o.data_inicio}</td>
+                    <td className="py-2 pr-4">
+                      <a
+                        href={`/financeiro?obra=${o.id}`}
+                        className="text-emerald-700 underline"
+                      >
+                        ver no financeiro
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+                {obras.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="py-2 text-zinc-500">Nenhuma obra cadastrada.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

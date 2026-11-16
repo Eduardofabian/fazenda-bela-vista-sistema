@@ -304,32 +304,61 @@ function LancamentosConteudo() {
       {carregando ? (
         <p className="text-sm text-zinc-500">Carregando...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-2 pr-4">Data</th>
-                <th className="py-2 pr-4">Tipo</th>
-                <th className="py-2 pr-4">Categoria</th>
-                <th className="py-2 pr-4">Descrição</th>
-                <th className="py-2 pr-4">Valor</th>
-                <th className="py-2 pr-4">Forma</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lancamentos.map((l) => (
-                <tr key={l.id} className="border-b border-zinc-100">
-                  <td className="py-2 pr-4">{l.data}</td>
-                  <td className="py-2 pr-4">{l.tipo}</td>
-                  <td className="py-2 pr-4">{l.categoria}</td>
-                  <td className="py-2 pr-4">{l.descricao}</td>
-                  <td className="py-2 pr-4">R$ {l.valor}</td>
-                  <td className="py-2 pr-4 text-zinc-500">{l.forma_pagamento}</td>
+        <>
+          {/* Celular: cada lançamento como cartão. */}
+          <div className="space-y-2 sm:hidden">
+            {lancamentos.map((l) => (
+              <div key={l.id} className="rounded border border-zinc-200 bg-white p-3 text-sm">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-medium text-zinc-900">{l.descricao}</span>
+                  <span
+                    className={
+                      l.tipo === "RECEITA" ? "font-medium text-emerald-700" : "font-medium text-red-700"
+                    }
+                  >
+                    R$ {l.valor}
+                  </span>
+                </div>
+                <div className="mt-1 flex flex-wrap gap-x-3 text-xs text-zinc-500">
+                  <span>{l.data}</span>
+                  <span>{l.categoria}</span>
+                  {l.forma_pagamento && <span>{l.forma_pagamento}</span>}
+                </div>
+              </div>
+            ))}
+            {lancamentos.length === 0 && (
+              <p className="text-sm text-zinc-500">Nenhum lançamento encontrado.</p>
+            )}
+          </div>
+
+          {/* Telas maiores: tabela de verdade. */}
+          <div className="hidden overflow-x-auto sm:block">
+            <table className="w-full min-w-[640px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-2 pr-4">Data</th>
+                  <th className="py-2 pr-4">Tipo</th>
+                  <th className="py-2 pr-4">Categoria</th>
+                  <th className="py-2 pr-4">Descrição</th>
+                  <th className="py-2 pr-4">Valor</th>
+                  <th className="py-2 pr-4">Forma</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {lancamentos.map((l) => (
+                  <tr key={l.id} className="border-b border-zinc-100">
+                    <td className="py-2 pr-4">{l.data}</td>
+                    <td className="py-2 pr-4">{l.tipo}</td>
+                    <td className="py-2 pr-4">{l.categoria}</td>
+                    <td className="py-2 pr-4">{l.descricao}</td>
+                    <td className="py-2 pr-4">R$ {l.valor}</td>
+                    <td className="py-2 pr-4 text-zinc-500">{l.forma_pagamento}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       <div className="mt-10 rounded border border-zinc-200 bg-white p-4">
@@ -368,7 +397,27 @@ function LancamentosConteudo() {
         {fechErro && <p className="text-sm text-red-700">{fechErro}</p>}
 
         {fechamento && (
-          <div className="overflow-x-auto">
+          <>
+            {/* Celular: cada total como linha de cartão. */}
+            <div className="space-y-1 sm:hidden">
+              {fechamento.map((row, i) => (
+                <div
+                  key={i}
+                  className="flex items-baseline justify-between border-b border-zinc-100 py-1 text-sm"
+                >
+                  <span className="text-zinc-600">
+                    {row.tipo} — {row.categoria}
+                  </span>
+                  <span className="font-medium">R$ {row.total}</span>
+                </div>
+              ))}
+              {fechamento.length === 0 && (
+                <p className="py-2 text-sm text-zinc-500">Nenhum lançamento nesse período.</p>
+              )}
+            </div>
+
+            {/* Telas maiores: tabela de verdade. */}
+            <div className="hidden overflow-x-auto sm:block">
             <table className="w-full min-w-[400px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 text-left text-zinc-500">
@@ -394,7 +443,8 @@ function LancamentosConteudo() {
                 )}
               </tbody>
             </table>
-          </div>
+            </div>
+          </>
         )}
       </div>
     </div>

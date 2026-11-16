@@ -28,14 +28,15 @@ export default function Nav() {
           Sair
         </button>
       </div>
-      {/* Linha de links com scroll horizontal — em tela de celular não cabem
-          todos lado a lado, então rola em vez de quebrar o layout. */}
-      <div className="mt-2 flex gap-4 overflow-x-auto sm:mt-0 sm:gap-6">
+      {/* Linha de links — em tela de celular não cabem todos lado a lado,
+          então quebra pra segunda linha em vez de cortar o último (scroll
+          horizontal só confundia, "Obras" ficava cortado na borda). */}
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 sm:mt-0 sm:gap-x-6">
         {LINKS.map((l) => (
           <Link
             key={l.href}
             href={l.href}
-            className="shrink-0 whitespace-nowrap text-sm text-zinc-600 hover:text-zinc-900"
+            className="whitespace-nowrap text-sm text-zinc-600 hover:text-zinc-900"
           >
             {l.label}
           </Link>

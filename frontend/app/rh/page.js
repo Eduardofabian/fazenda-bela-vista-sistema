@@ -233,7 +233,24 @@ function RhConteudo() {
       ) : (
         <>
           <h2 className="mb-2 text-sm font-semibold text-zinc-900">Funcionários cadastrados</h2>
-          <div className="mb-8 overflow-x-auto">
+
+          {/* Celular: cartões. */}
+          <div className="mb-8 space-y-2 sm:hidden">
+            {funcionarios.map((f) => (
+              <div key={f.id} className="rounded border border-zinc-200 bg-white p-3 text-sm">
+                <div className="font-medium text-zinc-900">{f.nome}</div>
+                <div className="mt-0.5 text-xs text-zinc-500">
+                  {f.funcao} — desde {f.data_admissao}
+                </div>
+              </div>
+            ))}
+            {funcionarios.length === 0 && (
+              <p className="text-sm text-zinc-500">Nenhum funcionário cadastrado.</p>
+            )}
+          </div>
+
+          {/* Telas maiores: tabela. */}
+          <div className="mb-8 hidden overflow-x-auto sm:block">
             <table className="w-full min-w-[400px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 text-left text-zinc-500">
@@ -272,7 +289,31 @@ function RhConteudo() {
               ))}
             </select>
           </div>
-          <div className="overflow-x-auto">
+          {/* Celular: cartões. */}
+          <div className="space-y-2 sm:hidden">
+            {dias.map((d) => (
+              <div
+                key={d.id}
+                className="flex items-baseline justify-between rounded border border-zinc-200 bg-white p-3 text-sm"
+              >
+                <div>
+                  <div className="font-medium text-zinc-900">{nomeFuncionario(d.funcionario)}</div>
+                  <div className="text-xs text-zinc-500">{d.data}</div>
+                </div>
+                <span
+                  className={d.trabalhou ? "text-sm text-emerald-700" : "text-sm text-red-700"}
+                >
+                  {d.trabalhou ? "Trabalhou" : "Faltou"}
+                </span>
+              </div>
+            ))}
+            {dias.length === 0 && (
+              <p className="text-sm text-zinc-500">Nenhum dia registrado.</p>
+            )}
+          </div>
+
+          {/* Telas maiores: tabela. */}
+          <div className="hidden overflow-x-auto sm:block">
             <table className="w-full min-w-[400px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 text-left text-zinc-500">
