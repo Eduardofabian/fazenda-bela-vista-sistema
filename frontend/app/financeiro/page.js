@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import RequireAuth from "@/components/RequireAuth";
+import CampoValor from "@/components/CampoValor";
 
 const TIPO_OPCOES = ["RECEITA", "DESPESA"];
 const CATEGORIA_OPCOES = [
@@ -208,14 +209,12 @@ function LancamentosConteudo() {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-zinc-600">Valor (R$)</label>
-            <input
-              type="number"
-              step="0.01"
+            <label className="block text-xs font-medium text-zinc-600">Valor</label>
+            <CampoValor
               required
-              className="w-full rounded border border-zinc-300 px-2 py-1.5 text-sm"
               value={form.valor}
-              onChange={(e) => setForm({ ...form, valor: e.target.value })}
+              onChange={(valor) => setForm({ ...form, valor })}
+              className="w-full py-1.5 text-sm outline-none"
             />
           </div>
           <div>
