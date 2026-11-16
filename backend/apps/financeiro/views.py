@@ -12,15 +12,18 @@ class LancamentoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Filtro simples por query string — o painel usa isso na tela de
-        # lançamentos (?tipo=...&categoria=...). Sem django-filter de
-        # propósito: são só 2 campos, não vale a dependência extra.
+        # lançamentos (?tipo=...&categoria=...&obra=...). Sem django-filter
+        # de propósito: são poucos campos, não vale a dependência extra.
         qs = super().get_queryset()
         tipo = self.request.query_params.get("tipo")
         categoria = self.request.query_params.get("categoria")
+        obra = self.request.query_params.get("obra")
         if tipo:
             qs = qs.filter(tipo=tipo)
         if categoria:
             qs = qs.filter(categoria=categoria)
+        if obra:
+            qs = qs.filter(obra_id=obra)
         return qs
 
     @action(detail=False, methods=["get"])

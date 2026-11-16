@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import RequireAuth from "@/components/RequireAuth";
 
@@ -26,6 +27,9 @@ const FORMA_PAGAMENTO_OPCOES = [
 ];
 
 function LancamentosConteudo() {
+  const searchParams = useSearchParams();
+  const obraDaUrl = searchParams.get("obra") || "";
+
   const [lancamentos, setLancamentos] = useState([]);
   const [maquinas, setMaquinas] = useState([]);
   const [obras, setObras] = useState([]);
@@ -35,6 +39,9 @@ function LancamentosConteudo() {
   const [salvando, setSalvando] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
+  // Vindo do link "ver gastos dessa obra" em /obras — filtra direto, sem
+  // aparecer como dropdown (é um link de atalho, não um filtro de tela).
+  const [filtroObra] = useState(obraDaUrl);
 
   const [form, setForm] = useState({
     data: "",
@@ -61,6 +68,7 @@ function LancamentosConteudo() {
       const params = new URLSearchParams();
       if (filtroTipo) params.set("tipo", filtroTipo);
       if (filtroCategoria) params.set("categoria", filtroCategoria);
+      if (filtroObra) params.set("obra", filtroObra);
       const qs = params.toString() ? `?${params.toString()}` : "";
       const data = await api.get(`/api/financeiro/lancamentos/${qs}`);
       setLancamentos(data.results ?? data);
@@ -92,7 +100,7 @@ function LancamentosConteudo() {
   useEffect(() => {
     carregar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtroTipo, filtroCategoria]);
+  }, [filtroTipo, filtroCategoria, filtroObra]);
 
   async function handleCriar(e) {
     e.preventDefault();
@@ -141,6 +149,13 @@ function LancamentosConteudo() {
           {mostrarForm ? "Cancelar" : "+ Novo lançamento"}
         </button>
       </div>
+
+      {filtroObra && (
+        <p className="mb-4 rounded bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+          Mostrando só os gastos da obra selecionada.{" "}
+          <a href="/financeiro" className="underline">Ver todos os lançamentos</a>
+        </p>
+      )}
 
       {erro && <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p>}
 

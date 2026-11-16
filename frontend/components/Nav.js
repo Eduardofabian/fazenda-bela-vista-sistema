@@ -9,7 +9,7 @@ const LINKS = [
   { href: "/financeiro", label: "Financeiro" },
   { href: "/maquinas", label: "Máquinas" },
   { href: "/rh", label: "Funcionários" },
-  // próximo módulo: obras — ver TAREFA02.
+  { href: "/obras", label: "Obras" },
 ];
 
 export default function Nav() {
