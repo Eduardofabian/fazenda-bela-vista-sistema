@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fazenda
+      POSTGRES_USER: fazenda
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fazenda"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Sem "ports:" aqui de propósito — o Postgres não precisa ficar exposto
+    # pra fora do servidor, só os outros containers da mesma rede o acessam.
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Montados aqui (não dentro do .env) porque o docker compose expande
+      # "${DOMAIN}" ao ler este arquivo, mas NÃO expande variáveis dentro
+      # de um .env passado via env_file — lá o valor viraria o texto
+      # literal "${DOMAIN}" em vez do domínio de verdade.
+      DATABASE_URL: postgres://fazenda:${POSTGRES_PASSWORD}@db:5432/fazenda
+      ALLOWED_HOSTS: ${DOMAIN}
+      CSRF_TRUSTED_ORIGINS: https://${DOMAIN}
+      CORS_ALLOWED_ORIGINS: https://${DOMAIN}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: https://${DOMAIN}
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:
