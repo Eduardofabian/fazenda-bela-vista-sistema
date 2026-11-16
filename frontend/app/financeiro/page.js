@@ -141,7 +141,7 @@ function LancamentosConteudo() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-zinc-900">Financeiro — Lançamentos</h1>
         <button
           onClick={() => setMostrarForm((v) => !v)}
@@ -163,7 +163,7 @@ function LancamentosConteudo() {
       {mostrarForm && (
         <form
           onSubmit={handleCriar}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-2 md:grid-cols-3"
         >
           <div>
             <label className="block text-xs font-medium text-zinc-600">Data</label>
@@ -278,7 +278,7 @@ function LancamentosConteudo() {
         </form>
       )}
 
-      <div className="mb-4 flex gap-3">
+      <div className="mb-4 flex flex-wrap gap-3">
         <select
           className="rounded border border-zinc-300 px-2 py-1.5 text-sm"
           value={filtroTipo}
@@ -304,37 +304,39 @@ function LancamentosConteudo() {
       {carregando ? (
         <p className="text-sm text-zinc-500">Carregando...</p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 text-left text-zinc-500">
-              <th className="py-2 pr-4">Data</th>
-              <th className="py-2 pr-4">Tipo</th>
-              <th className="py-2 pr-4">Categoria</th>
-              <th className="py-2 pr-4">Descrição</th>
-              <th className="py-2 pr-4">Valor</th>
-              <th className="py-2 pr-4">Forma</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lancamentos.map((l) => (
-              <tr key={l.id} className="border-b border-zinc-100">
-                <td className="py-2 pr-4">{l.data}</td>
-                <td className="py-2 pr-4">{l.tipo}</td>
-                <td className="py-2 pr-4">{l.categoria}</td>
-                <td className="py-2 pr-4">{l.descricao}</td>
-                <td className="py-2 pr-4">R$ {l.valor}</td>
-                <td className="py-2 pr-4 text-zinc-500">{l.forma_pagamento}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                <th className="py-2 pr-4">Data</th>
+                <th className="py-2 pr-4">Tipo</th>
+                <th className="py-2 pr-4">Categoria</th>
+                <th className="py-2 pr-4">Descrição</th>
+                <th className="py-2 pr-4">Valor</th>
+                <th className="py-2 pr-4">Forma</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {lancamentos.map((l) => (
+                <tr key={l.id} className="border-b border-zinc-100">
+                  <td className="py-2 pr-4">{l.data}</td>
+                  <td className="py-2 pr-4">{l.tipo}</td>
+                  <td className="py-2 pr-4">{l.categoria}</td>
+                  <td className="py-2 pr-4">{l.descricao}</td>
+                  <td className="py-2 pr-4">R$ {l.valor}</td>
+                  <td className="py-2 pr-4 text-zinc-500">{l.forma_pagamento}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <div className="mt-10 rounded border border-zinc-200 bg-white p-4">
         <h2 className="mb-3 text-sm font-semibold text-zinc-900">
           Fechamento (soma por tipo/categoria num período)
         </h2>
-        <form onSubmit={handleFechamento} className="mb-4 flex items-end gap-3">
+        <form onSubmit={handleFechamento} className="mb-4 flex flex-wrap items-end gap-3">
           <div>
             <label className="block text-xs font-medium text-zinc-600">Início</label>
             <input
@@ -366,31 +368,33 @@ function LancamentosConteudo() {
         {fechErro && <p className="text-sm text-red-700">{fechErro}</p>}
 
         {fechamento && (
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-1 pr-4">Tipo</th>
-                <th className="py-1 pr-4">Categoria</th>
-                <th className="py-1 pr-4">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fechamento.map((row, i) => (
-                <tr key={i} className="border-b border-zinc-100">
-                  <td className="py-1 pr-4">{row.tipo}</td>
-                  <td className="py-1 pr-4">{row.categoria}</td>
-                  <td className="py-1 pr-4">R$ {row.total}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[400px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-1 pr-4">Tipo</th>
+                  <th className="py-1 pr-4">Categoria</th>
+                  <th className="py-1 pr-4">Total</th>
                 </tr>
-              ))}
-              {fechamento.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="py-2 text-zinc-500">
-                    Nenhum lançamento nesse período.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {fechamento.map((row, i) => (
+                  <tr key={i} className="border-b border-zinc-100">
+                    <td className="py-1 pr-4">{row.tipo}</td>
+                    <td className="py-1 pr-4">{row.categoria}</td>
+                    <td className="py-1 pr-4">R$ {row.total}</td>
+                  </tr>
+                ))}
+                {fechamento.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="py-2 text-zinc-500">
+                      Nenhum lançamento nesse período.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

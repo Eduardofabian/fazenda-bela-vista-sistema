@@ -21,18 +21,26 @@ export default function Nav() {
   }
 
   return (
-    <nav className="flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-3">
-      <div className="flex items-center gap-6">
+    <nav className="border-b border-zinc-200 bg-white px-4 py-3 sm:px-6">
+      <div className="flex items-center justify-between">
         <span className="font-semibold text-emerald-800">Fazenda Bela Vista</span>
+        <button onClick={sair} className="text-sm text-zinc-500 hover:text-zinc-900">
+          Sair
+        </button>
+      </div>
+      {/* Linha de links com scroll horizontal — em tela de celular não cabem
+          todos lado a lado, então rola em vez de quebrar o layout. */}
+      <div className="mt-2 flex gap-4 overflow-x-auto sm:mt-0 sm:gap-6">
         {LINKS.map((l) => (
-          <Link key={l.href} href={l.href} className="text-sm text-zinc-600 hover:text-zinc-900">
+          <Link
+            key={l.href}
+            href={l.href}
+            className="shrink-0 whitespace-nowrap text-sm text-zinc-600 hover:text-zinc-900"
+          >
             {l.label}
           </Link>
         ))}
       </div>
-      <button onClick={sair} className="text-sm text-zinc-500 hover:text-zinc-900">
-        Sair
-      </button>
     </nav>
   );
 }

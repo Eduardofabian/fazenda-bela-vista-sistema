@@ -26,7 +26,11 @@ export default function RequireAuth({ children }) {
   return (
     <>
       <Nav />
-      <main className="mx-auto max-w-5xl p-6">{children}</main>
+      {/* min-w-0 é o que impede o <main> de crescer pra caber as tabelas
+          largas — <body> é flex-col (ver layout.js) e, por padrão, um item
+          flex tem min-width:auto (baseado no conteúdo), não 0. Sem isso, o
+          overflow-x-auto das tabelas não tem efeito nenhum no celular. */}
+      <main className="mx-auto w-full min-w-0 max-w-5xl p-4 sm:p-6">{children}</main>
     </>
   );
 }

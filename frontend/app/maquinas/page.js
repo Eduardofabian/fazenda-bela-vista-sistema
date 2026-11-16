@@ -126,9 +126,9 @@ function MaquinasConteudo() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-zinc-900">Máquinas</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMostrarFormHoras((v) => !v)}
             className="rounded bg-zinc-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800"
@@ -155,7 +155,7 @@ function MaquinasConteudo() {
       {mostrarFormMaquina && (
         <form
           onSubmit={handleCriarMaquina}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-2 md:grid-cols-3"
         >
           <div>
             <label className="block text-xs font-medium text-zinc-600">Nome</label>
@@ -217,7 +217,7 @@ function MaquinasConteudo() {
       {mostrarFormHoras && (
         <form
           onSubmit={handleCriarHoras}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-2 md:grid-cols-3"
         >
           {erroHoras && (
             <p className="col-span-3 rounded bg-red-50 px-3 py-2 text-sm text-red-700">{erroHoras}</p>
@@ -300,7 +300,7 @@ function MaquinasConteudo() {
       {mostrarFormPeca && (
         <form
           onSubmit={handleCriarPeca}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-2 md:grid-cols-3"
         >
           {erroPeca && (
             <p className="col-span-3 rounded bg-red-50 px-3 py-2 text-sm text-red-700">{erroPeca}</p>
@@ -362,7 +362,7 @@ function MaquinasConteudo() {
         <div className="space-y-4">
           {maquinas.map((m) => (
             <div key={m.id} className="rounded border border-zinc-200 bg-white p-4">
-              <div className="flex items-baseline justify-between">
+              <div className="flex flex-wrap items-baseline justify-between gap-1">
                 <h2 className="font-medium text-zinc-900">
                   {m.nome} <span className="text-sm text-zinc-500">— {m.tipo}</span>
                 </h2>

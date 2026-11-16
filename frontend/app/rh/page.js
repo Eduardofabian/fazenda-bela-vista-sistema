@@ -106,9 +106,9 @@ function RhConteudo() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-zinc-900">Funcionários</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setMostrarFormDia((v) => !v)}
             className="rounded bg-zinc-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-800"
@@ -129,7 +129,7 @@ function RhConteudo() {
       {mostrarFormFuncionario && (
         <form
           onSubmit={handleCriarFuncionario}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-3"
         >
           <div>
             <label className="block text-xs font-medium text-zinc-600">Nome</label>
@@ -176,7 +176,7 @@ function RhConteudo() {
       {mostrarFormDia && (
         <form
           onSubmit={handleCriarDia}
-          className="mb-6 grid grid-cols-3 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-3"
         >
           {erroDia && (
             <p className="col-span-3 rounded bg-red-50 px-3 py-2 text-sm text-red-700">{erroDia}</p>
@@ -233,31 +233,33 @@ function RhConteudo() {
       ) : (
         <>
           <h2 className="mb-2 text-sm font-semibold text-zinc-900">Funcionários cadastrados</h2>
-          <table className="mb-8 w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-2 pr-4">Nome</th>
-                <th className="py-2 pr-4">Função</th>
-                <th className="py-2 pr-4">Admissão</th>
-              </tr>
-            </thead>
-            <tbody>
-              {funcionarios.map((f) => (
-                <tr key={f.id} className="border-b border-zinc-100">
-                  <td className="py-2 pr-4">{f.nome}</td>
-                  <td className="py-2 pr-4">{f.funcao}</td>
-                  <td className="py-2 pr-4">{f.data_admissao}</td>
+          <div className="mb-8 overflow-x-auto">
+            <table className="w-full min-w-[400px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-2 pr-4">Nome</th>
+                  <th className="py-2 pr-4">Função</th>
+                  <th className="py-2 pr-4">Admissão</th>
                 </tr>
-              ))}
-              {funcionarios.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="py-2 text-zinc-500">Nenhum funcionário cadastrado.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {funcionarios.map((f) => (
+                  <tr key={f.id} className="border-b border-zinc-100">
+                    <td className="py-2 pr-4">{f.nome}</td>
+                    <td className="py-2 pr-4">{f.funcao}</td>
+                    <td className="py-2 pr-4">{f.data_admissao}</td>
+                  </tr>
+                ))}
+                {funcionarios.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="py-2 text-zinc-500">Nenhum funcionário cadastrado.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
 
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-semibold text-zinc-900">Dias trabalhados</h2>
             <select
               className="rounded border border-zinc-300 px-2 py-1.5 text-sm"
@@ -270,29 +272,31 @@ function RhConteudo() {
               ))}
             </select>
           </div>
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-left text-zinc-500">
-                <th className="py-2 pr-4">Funcionário</th>
-                <th className="py-2 pr-4">Data</th>
-                <th className="py-2 pr-4">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dias.map((d) => (
-                <tr key={d.id} className="border-b border-zinc-100">
-                  <td className="py-2 pr-4">{nomeFuncionario(d.funcionario)}</td>
-                  <td className="py-2 pr-4">{d.data}</td>
-                  <td className="py-2 pr-4">{d.trabalhou ? "Trabalhou" : "Faltou"}</td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[400px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                  <th className="py-2 pr-4">Funcionário</th>
+                  <th className="py-2 pr-4">Data</th>
+                  <th className="py-2 pr-4">Status</th>
                 </tr>
-              ))}
-              {dias.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="py-2 text-zinc-500">Nenhum dia registrado.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dias.map((d) => (
+                  <tr key={d.id} className="border-b border-zinc-100">
+                    <td className="py-2 pr-4">{nomeFuncionario(d.funcionario)}</td>
+                    <td className="py-2 pr-4">{d.data}</td>
+                    <td className="py-2 pr-4">{d.trabalhou ? "Trabalhou" : "Faltou"}</td>
+                  </tr>
+                ))}
+                {dias.length === 0 && (
+                  <tr>
+                    <td colSpan={3} className="py-2 text-zinc-500">Nenhum dia registrado.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </div>

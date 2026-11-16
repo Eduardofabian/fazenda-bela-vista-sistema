@@ -69,7 +69,7 @@ function AnimaisConteudo() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-zinc-900">Rebanho — Animais</h1>
         <button
           onClick={() => setMostrarForm((v) => !v)}
@@ -86,7 +86,7 @@ function AnimaisConteudo() {
       {mostrarForm && (
         <form
           onSubmit={handleCriar}
-          className="mb-6 grid grid-cols-2 gap-3 rounded border border-zinc-200 bg-white p-4"
+          className="mb-6 grid grid-cols-1 gap-3 rounded border border-zinc-200 bg-white p-4 sm:grid-cols-2"
         >
           <div>
             <label className="block text-xs font-medium text-zinc-600">Número do brinco</label>
@@ -165,34 +165,36 @@ function AnimaisConteudo() {
       {carregando ? (
         <p className="text-sm text-zinc-500">Carregando...</p>
       ) : (
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 text-left text-zinc-500">
-              <th className="py-2 pr-4">Brinco</th>
-              <th className="py-2 pr-4">Sexo</th>
-              <th className="py-2 pr-4">Categoria</th>
-              <th className="py-2 pr-4">Status</th>
-              <th className="py-2 pr-4">Dias sem parir</th>
-              <th className="py-2 pr-4">Observações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {animais.map((a) => (
-              <tr key={a.id} className="border-b border-zinc-100">
-                <td className="py-2 pr-4 font-medium">{a.numero_brinco || "S/N"}</td>
-                <td className="py-2 pr-4">{a.sexo}</td>
-                <td className="py-2 pr-4">{a.categoria}</td>
-                <td className="py-2 pr-4">{a.status}</td>
-                <td className="py-2 pr-4">
-                  {a.categoria === "VACA"
-                    ? a.dias_desde_ultimo_parto ?? "sem registro"
-                    : "—"}
-                </td>
-                <td className="py-2 pr-4 text-zinc-500">{a.observacoes}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-zinc-200 text-left text-zinc-500">
+                <th className="py-2 pr-4">Brinco</th>
+                <th className="py-2 pr-4">Sexo</th>
+                <th className="py-2 pr-4">Categoria</th>
+                <th className="py-2 pr-4">Status</th>
+                <th className="py-2 pr-4">Dias sem parir</th>
+                <th className="py-2 pr-4">Observações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {animais.map((a) => (
+                <tr key={a.id} className="border-b border-zinc-100">
+                  <td className="py-2 pr-4 font-medium">{a.numero_brinco || "S/N"}</td>
+                  <td className="py-2 pr-4">{a.sexo}</td>
+                  <td className="py-2 pr-4">{a.categoria}</td>
+                  <td className="py-2 pr-4">{a.status}</td>
+                  <td className="py-2 pr-4">
+                    {a.categoria === "VACA"
+                      ? a.dias_desde_ultimo_parto ?? "sem registro"
+                      : "—"}
+                  </td>
+                  <td className="py-2 pr-4 text-zinc-500">{a.observacoes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
