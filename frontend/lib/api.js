@@ -16,6 +16,26 @@ export function clearToken() {
   localStorage.removeItem("fazenda_token");
 }
 
+// Transforma o erro padrão do DRF (ex: {"valor": ["Este campo é
+// obrigatório."], "non_field_errors": ["..."]}) numa frase legível. Se não
+// for esse formato (erro 500, HTML de debug, etc.), cai pro texto crú.
+async function mensagemDeErro(res) {
+  const texto = await res.text();
+  try {
+    const dados = JSON.parse(texto);
+    const partes = [];
+    for (const [campo, valores] of Object.entries(dados)) {
+      const lista = Array.isArray(valores) ? valores : [valores];
+      const prefixo = campo === "non_field_errors" || campo === "detail" ? "" : `${campo}: `;
+      partes.push(`${prefixo}${lista.join(" ")}`);
+    }
+    if (partes.length > 0) return partes.join(" — ");
+  } catch {
+    // não era JSON — segue pro texto crú abaixo
+  }
+  return `Erro ${res.status}: ${texto}`;
+}
+
 async function request(path, { method = "GET", body } = {}) {
   const token = getToken();
   const headers = { "Content-Type": "application/json" };
@@ -34,8 +54,7 @@ async function request(path, { method = "GET", body } = {}) {
   }
 
   if (!res.ok) {
-    const texto = await res.text();
-    throw new Error(`Erro ${res.status}: ${texto}`);
+    throw new Error(await mensagemDeErro(res));
   }
 
   if (res.status === 204) return null;

@@ -8,8 +8,8 @@ const LINKS = [
   { href: "/animais", label: "Rebanho" },
   { href: "/financeiro", label: "Financeiro" },
   { href: "/maquinas", label: "Máquinas" },
-  // próximos módulos entram aqui conforme forem construídos (rh, obras) —
-  // ver TAREFA02.
+  { href: "/rh", label: "Funcionários" },
+  // próximo módulo: obras — ver TAREFA02.
 ];
 
 export default function Nav() {
